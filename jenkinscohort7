@@ -1,0 +1,30 @@
+pipeline{
+    agent any
+    tools{
+      maven "maven3.8.4"
+    }
+stages{
+  stage('1.GitClone'){
+  steps{
+    sh "echo Github cloning"
+    git 'https://github.com/team16flight/web-app.git'
+  }
+}
+stage('2.MavenBuild'){
+  steps{
+  sh "echo build packages"
+  sh "mvn clean package"
+}
+}
+stage('3.testingtheCode'){
+  steps{
+    sh "mvn sonar:sonar"
+  }
+  }
+stage('4.backupArchitfacts'){
+  steps{
+    sh "mvn deploy"
+  }
+  }
+ }
+ }
