@@ -1,0 +1,40 @@
+pipeline{
+agent any
+tools{
+maven maven3.8.4
+}
+stages{
+stage("1. gitclone"){
+steps {
+git "https://github.com/Ethel2/web-app.git"
+sh "echo cloning git"
+}
+}
+stage ("2.buid"){
+steps {
+sh "echo building hokukem app"
+sh "mvn clean package"
+}
+}
+stage (3. test") {
+steps {
+sh "echo testing the app"
+sh sonar:sonar
+}
+}
+stage ("4. deploying artifcat") {
+steps {
+sh "mvn deploy"
+sh "backing up articact in nexus"
+}
+}
+stage ("5. deploy to prod") {
+steps {
+sh " echo deploying to tomcat"
+deploy adapters: [tomcat9(credentialsId: 'ethel-tomcat', path: '', url: 'http://3.15.140.57:8080/')], contextPath: null, war: 'target/*.war'
+}
+}
+stage ("6. email notification")
+steps{
+input message: 'application build sucessful'
+            emailext body: 'This pipeline has been successfully built. ', subject: 'sucessful build', to: 'kukukem@gmail.com'
