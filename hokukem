@@ -16,10 +16,10 @@ sh "echo building hokukem app"
 sh "mvn clean package"
 }
 }
-stage (3. test") {
+stage ("3. test") {
 steps {
 sh "echo testing the app"
-sh sonar:sonar
+sh "sonar:sonar"
 }
 }
 stage ("4. deploying artifcat") {
@@ -34,7 +34,11 @@ sh " echo deploying to tomcat"
 deploy adapters: [tomcat9(credentialsId: 'ethel-tomcat', path: '', url: 'http://3.15.140.57:8080/')], contextPath: null, war: 'target/*.war'
 }
 }
-stage ("6. email notification")
+stage ("6. email notification"){
 steps{
 input message: 'application build sucessful'
             emailext body: 'This pipeline has been successfully built. ', subject: 'sucessful build', to: 'kukukem@gmail.com'
+   }
+   }
+   }
+   }
